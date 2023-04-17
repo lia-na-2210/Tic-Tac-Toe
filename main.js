@@ -20,12 +20,12 @@ startButton.addEventListener('click', () => {
 });
 
 function GameBoard(choice) {
-  //gameBoard.push(choice);
   if (gameBoard.some((e) => e.boxSpace === choice.boxSpace)) {
-    return
+    return;
   }
   gameBoard.push(choice);
   console.log(gameBoard);
+  score();
 }
 
 function moves(box, marker) {
@@ -35,10 +35,18 @@ function moves(box, marker) {
   };
 }
 
+function showChoice(tic, tac) {
+  const box = document.getElementById(tic);
+  box.innerText = tac;
+}
+
+function score() {
+  const 
+}
+
 function playGame() {
   let lastKey = ' ';
   const box = document.querySelectorAll('.box');
-  console.log(box);
   box.forEach((box) => box.addEventListener('click', (e) => {
     const boxId = e.target.id;
     let move;
@@ -46,10 +54,12 @@ function playGame() {
       lastKey = 'X';
       move = moves(boxId, lastKey);
       GameBoard(move);
+      showChoice(boxId, lastKey);
     } else {
       lastKey = 'O';
       move = moves(boxId, lastKey);
       GameBoard(move);
+      showChoice(boxId, lastKey);
     }
   }));
 }
