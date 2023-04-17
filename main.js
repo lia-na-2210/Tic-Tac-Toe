@@ -2,6 +2,7 @@ const startButton = document.getElementById('start-btn');
 const selection = document.getElementById('selection');
 const gameArea = document.getElementById('game-area');
 const players = [];
+const gameBoard = [];
 
 startButton.addEventListener('click', () => {
   const name1 = document.getElementById('name-1').value;
@@ -15,8 +16,40 @@ startButton.addEventListener('click', () => {
   players.push({ playerX: name1, mark: 'X' }, { playerO: name2, mark: 'O' });
   selection.style.display = 'none';
   gameArea.style.display = 'flex';
+  playGame();
 });
 
-const GameBoard = () => {
-  const gameBoard = [];
-};
+function GameBoard(choice) {
+  //gameBoard.push(choice);
+  if (gameBoard.some((e) => e.boxSpace === choice.boxSpace)) {
+    return
+  }
+  gameBoard.push(choice);
+  console.log(gameBoard);
+}
+
+function moves(box, marker) {
+  return {
+    boxSpace: box,
+    mark: marker,
+  };
+}
+
+function playGame() {
+  let lastKey = ' ';
+  const box = document.querySelectorAll('.box');
+  console.log(box);
+  box.forEach((box) => box.addEventListener('click', (e) => {
+    const boxId = e.target.id;
+    let move;
+    if (lastKey === 'O' || lastKey === ' ') {
+      lastKey = 'X';
+      move = moves(boxId, lastKey);
+      GameBoard(move);
+    } else {
+      lastKey = 'O';
+      move = moves(boxId, lastKey);
+      GameBoard(move);
+    }
+  }));
+}
