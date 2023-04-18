@@ -3,6 +3,7 @@ const selection = document.getElementById('selection');
 const gameArea = document.getElementById('game-area');
 const players = [];
 const gameBoard = [];
+let play = 0;
 
 startButton.addEventListener('click', () => {
   const name1 = document.getElementById('name-1').value;
@@ -24,8 +25,11 @@ function GameBoard(choice) {
     return;
   }
   gameBoard.push(choice);
-  console.log(gameBoard);
-  score();
+  play += 1;
+
+  if (play >= 5) {
+    score();
+  }
 }
 
 function moves(box, marker) {
@@ -41,7 +45,7 @@ function showChoice(tic, tac) {
 }
 
 function score() {
-  const 
+  const scoreBoard = gameBoard.map(({ boxSpace, mark }) => ({ [boxSpace]: mark }));
 }
 
 function playGame() {
