@@ -32,6 +32,10 @@ function GameBoard(choice) {
   if (play > 4) {
     score();
   }
+
+  if (play > 8) {
+    console.log('its a tie!');
+  }
 }
 
 function moves(box, marker) {
