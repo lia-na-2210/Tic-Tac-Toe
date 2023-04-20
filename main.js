@@ -6,38 +6,6 @@ let playerX;
 let playerO;
 let play = 0;
 
-startButton.addEventListener('click', () => {
-  const name1 = document.getElementById('name-1').value;
-  const name2 = document.getElementById('name-2').value;
-
-  if (name1.length === 0 || name2.length === 0) {
-    alert('You need to pick a name');
-    return;
-  }
-
-  playerX = name1;
-  playerO = name2;
-  selection.style.display = 'none';
-  gameArea.style.display = 'flex';
-  playGame();
-});
-
-function GameBoard(choice) {
-  if (gameBoard.some((e) => e.boxSpace === choice.boxSpace)) {
-    return;
-  }
-  gameBoard.push(choice);
-  play += 1;
-
-  if (play > 4) {
-    score();
-  }
-
-  if (play > 8) {
-    console.log('its a tie!');
-  }
-}
-
 function moves(box, marker) {
   return {
     boxSpace: box,
@@ -50,9 +18,16 @@ function showChoice(tic, tac) {
   box.innerText = tac;
 }
 
+function checkWinner(marker) {
+  if (marker === 'X') {
+    console.log(`${playerX} is the winner!`);
+  } if (marker === 'O') {
+    console.log(`${playerO} is the winner!`);
+  }
+}
+
 function score() {
-  // const scoreBoard = gameBoard.map(({ boxSpace, mark }) => ({ [boxSpace]: mark }));
-  const box1 = document.getElementById('box1').textContent;
+  const box1 = document.getElementById('box1').innerText;
   const box2 = document.getElementById('box2').innerText;
   const box3 = document.getElementById('box3').innerText;
   const box4 = document.getElementById('box4').innerText;
@@ -81,30 +56,67 @@ function score() {
   }
 }
 
-function checkWinner(marker) {
-  if (marker === 'X') {
-    console.log(`${playerX} is the winner!`);
-  } if (marker === 'O') {
-    console.log(`${playerO} is the winner!`);
+function GameBoard(choice, box, mark) {
+  if (gameBoard.some((e) => e.boxSpace === choice.boxSpace)) {
+    return;
+  }
+  gameBoard.push(choice);
+  play += 1;
+  showChoice(box, mark);
+
+  if (play > 4) {
+    score();
+  }
+
+  if (play > 8) {
+    console.log('its a tie!');
   }
 }
 
 function playGame() {
   let lastKey = ' ';
-  const box = document.querySelectorAll('.box');
-  box.forEach((box) => box.addEventListener('click', (e) => {
+  const boxes = document.querySelectorAll('.box');
+  boxes.forEach((box) => box.addEventListener('click', (e) => {
     const boxId = e.target.id;
     let move;
     if (lastKey === 'O' || lastKey === ' ') {
       lastKey = 'X';
       move = moves(boxId, lastKey);
-      showChoice(boxId, lastKey);
-      GameBoard(move);
+      GameBoard(move, boxId, lastKey);
     } else {
       lastKey = 'O';
       move = moves(boxId, lastKey);
-      showChoice(boxId, lastKey);
-      GameBoard(move);
+      GameBoard(move, boxId, lastKey);
     }
   }));
 }
+
+startButton.addEventListener('click', () => {
+  const name1 = document.getElementById('name-1').value;
+  const name2 = document.getElementById('name-2').value;
+  const area = document.getElementById('area');
+
+  if (name1.length === 0 || name2.length === 0) {
+    alert('You need to pick a name');
+    return;
+  }
+
+  playerX = name1;
+  playerO = name2;
+  selection.style.display = 'none';
+  gameArea.style.display = 'flex';
+  area.style.display = 'none';
+  playGame();
+});
+
+document.getElementById('restart-btn').addEventListener('click', () => {
+  gameBoard.length = 0;
+  playerX = '';
+  playerO = '';
+  play = 0;
+  const boxes = document.getElementsByClassName('box');
+  for (let i = 0; i < boxes.length; i++) {
+    boxes[i].innerText = '';
+  }
+  console.log(gameBoard, play);
+});
