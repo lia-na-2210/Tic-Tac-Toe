@@ -1,10 +1,12 @@
 const startButton = document.getElementById('start-btn');
 const selection = document.getElementById('selection');
 const gameArea = document.getElementById('game-area');
+const message = document.getElementById('message');
 const gameBoard = [];
 let playerX;
 let playerO;
 let play = 0;
+let game = false;
 
 function moves(box, marker) {
   return {
@@ -20,10 +22,13 @@ function showChoice(tic, tac) {
 
 function checkWinner(marker) {
   if (marker === 'X') {
-    console.log(`${playerX} is the winner!`);
+    message.innerText = (`${playerX} is the winner!`);
+    message.style.display = 'flex';
   } if (marker === 'O') {
-    console.log(`${playerO} is the winner!`);
+    message.innerText = (`${playerO} is the winner!`);
+    message.style.display = 'flex';
   }
+  game = true;
 }
 
 function score() {
@@ -57,6 +62,9 @@ function score() {
 }
 
 function GameBoard(choice, box, mark) {
+  if (game === true) {
+    return;
+  }
   if (gameBoard.some((e) => e.boxSpace === choice.boxSpace)) {
     return;
   }
@@ -69,7 +77,9 @@ function GameBoard(choice, box, mark) {
   }
 
   if (play > 8) {
-    console.log('its a tie!');
+    message.innerText = ('Uh Oh! It\'s a tie!');
+    message.style.display = 'flex';
+    game = true;
   }
 }
 
@@ -118,5 +128,23 @@ document.getElementById('restart-btn').addEventListener('click', () => {
   for (let i = 0; i < boxes.length; i++) {
     boxes[i].innerText = '';
   }
-  console.log(gameBoard, play);
+  message.style.display = 'none';
+  message.innerText = '';
+  game = false;
+  selection.style.display = 'inline';
+  gameArea.style.display = 'none';
+  const area = document.getElementById('area');
+  area.style.display = 'flex';
+});
+
+document.getElementById('again-btn').addEventListener('click', () => {
+  gameBoard.length = 0;
+  play = 0;
+  const boxes = document.getElementsByClassName('box');
+  for (let i = 0; i < boxes.length; i++) {
+    boxes[i].innerText = '';
+  }
+  message.style.display = 'none';
+  message.innerText = '';
+  game = false;
 });
